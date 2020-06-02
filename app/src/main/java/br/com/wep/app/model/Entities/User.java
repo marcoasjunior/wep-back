@@ -1,12 +1,13 @@
-package br.com.wep.app.Entities;
+package br.com.wep.app.model.Entities;
+
+import br.com.wep.app.model.Repos.UserRepo;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "usuario")
-public class User<E> {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,9 @@ public class User<E> {
     @Column(name = "whatssap", nullable = false, length = 11)
     private String whatssap;
 
+    @ManyToMany
+    private List<User> friends;
+
     public User() {
     }
 
@@ -33,7 +37,7 @@ public class User<E> {
         this.whatssap = whatssap;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -75,5 +79,13 @@ public class User<E> {
 
     public void setWhatssap(String whatssap) {
         this.whatssap = whatssap;
+    }
+
+    public void setFriend(User friend){
+        this.friends.add(friend);
+    }
+
+    public List<User> getFriends() {
+        return friends;
     }
 }
