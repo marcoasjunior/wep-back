@@ -5,6 +5,7 @@ import br.com.wep.app.model.Repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class UserController {
         return users;
     }
 
-    //Registro de usuarios...necessita instanciar um novo usuario
+    //Registro de usuarios...usuario "instanciado" como parametro
     //FALTA EFETUAR AS VALIDAÇÔES <----------------------
     @PostMapping
     public User registerUser(User user){
@@ -30,20 +31,38 @@ public class UserController {
 
     //Adicionar amigo...necessita dos ids do usuario e do amigo
     @PutMapping(path = "/friends")
-    public boolean makeFriend(@RequestParam(name = "user") User user,
-                              @RequestParam(name = "friend") User friend) {
+    public boolean makeFriend(@RequestParam(name = "userID") int userID,
+                              @RequestParam(name = "friendID") int friendID) {
         try {
-            Optional<User> u = repo.findById(user.getId());
+            Optional<User> user = repo.findById(userID);
+            User userFound = user.get();
 
-            if(u != null) {
-                user.setFriend(friend);
-                repo.save(user);
-                return true;
-            }
+            Optional<User> friend = repo.findById(friendID);
+            User friendFound = friend.get();
+
+            userFound.setFriend(friendFound);
+            repo.save(userFound);
+
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
+    //Retorna todos os amigos de um usuario...espera o ID de algum usuario
+    @GetMapping(path = "/friends/{userID}")
+    public List<User> getFriendsByUser(@PathVariable(name = "userID") int userID){
+        try {
+            Optional<User> user = repo.findById(userID);
+            User userFound = user.get();
+
+            List<User> friends = userFound.getFriends();
+            return friends;
         }catch (Exception e){
             System.out.println(e);
         }
-
-        return false;
+        return null;
     }
+
 }

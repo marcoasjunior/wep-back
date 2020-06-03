@@ -1,9 +1,9 @@
 package br.com.wep.app.model.Entities;
-
 import br.com.wep.app.model.Repos.UserRepo;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +16,7 @@ public class User {
     private String avatar;
     @Column(name = "name", nullable = false, length = 55)
     private String name;
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = 60)
     private String email;
     @Column(name = "password", nullable = false, length = 8)
     private String password;
