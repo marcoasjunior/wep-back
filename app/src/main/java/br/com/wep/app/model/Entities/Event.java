@@ -11,13 +11,28 @@ public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "Title", nullable = false, length = 100)
     private String title;
+
+    @Column(name = "description", nullable = false, length = 600)
     private String description;
+
+    @Column(name = "adress", nullable = false, length = 100)
     private String adress;
+
+    @Column(name = "img", nullable = false, length = 200)
     private String img;
+
+    @Column(name = "privated", nullable = false)
     private boolean privated;
+
+    @Column(name = "createdAt", nullable = false, length = 55)
     private Date createdAt;
+
+    @Column(name = "eventeDate", nullable = false)
     private Date eventeDate;
+
     @OneToMany(mappedBy = "event")
     private List<Comment> comments;
     @ManyToOne
