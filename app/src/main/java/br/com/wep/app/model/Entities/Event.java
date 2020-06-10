@@ -4,13 +4,18 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+//@Entity diz está classe é uma entidade
 @Entity
+//@Table referencia a table do banco de dados
 @Table(name = "events")
 public class Event {
 
+    //@Id diz que este atributo é a chava primaria da entidade
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //Os @Column são "configurações" das colunas da tabela
 
     @Column(name = "Title", nullable = false, length = 100)
     private String title;

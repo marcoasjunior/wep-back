@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+//@RestController declara essa classe como um controller
 @RestController
+//@RequestMapping a rota "mãe" de todas as rotas
 @RequestMapping(path = "/user")
 public class UserController {
 
