@@ -23,6 +23,9 @@ public class User {
     @Column(name = "whatssap", nullable = false, length = 11)
     private String whatssap;
 
+    @OneToMany(mappedBy = "user")
+    private List<Event> myEvents;
+
     @ManyToMany
     private List<User> friends;
 

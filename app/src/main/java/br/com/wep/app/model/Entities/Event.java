@@ -13,26 +13,19 @@ public class Event {
     //@Id diz que este atributo é a chava primaria da entidade
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private int id;
     //Os @Column são "configurações" das colunas da tabela
-
     @Column(name = "Title", nullable = false, length = 100)
     private String title;
-
     @Column(name = "description", nullable = false, length = 600)
     private String description;
-
     @Column(name = "adress", nullable = true, length = 100)
     private String adress;
-
     @Column(name = "img", nullable = false, length = 200)
     private String img;
-
     @Column(name = "privated", nullable = false)
     private boolean privated;
 
-//    @Column(name = "createdAt", nullable = false)
     private Date createdAt;
 
     @PrePersist
@@ -40,17 +33,17 @@ public class Event {
         createdAt = new Date();
     }
 
-
     @Column(name = "eventeDate", nullable = false)
     private String eventeDate;
 
     @OneToMany(mappedBy = "event")
     private List<Comment> comments;
+
     @ManyToOne
     private User user;
-    @OneToMany
-    private List<User> likes;
+
     private int confimed;
+
 
     public Event() {
     }
@@ -65,11 +58,11 @@ public class Event {
         this.user = user;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -145,13 +138,7 @@ public class Event {
         this.user = user;
     }
 
-    public List<User> getLikes() {
-        return likes;
-    }
 
-    public void setLikes(List<User> likes) {
-        this.likes = likes;
-    }
 
     public int getConfimed() {
         return confimed;
