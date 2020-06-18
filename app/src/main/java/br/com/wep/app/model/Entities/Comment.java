@@ -18,6 +18,11 @@ public class Comment {
     private Event event;
     private Date createdAt;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = new Date();
+    }
+
     public Comment() {
     }
 

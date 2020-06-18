@@ -3,9 +3,12 @@ package br.com.wep.app.Controllers;
 import br.com.wep.app.model.Entities.Comment;
 import br.com.wep.app.model.Repos.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/comment")
@@ -26,7 +29,7 @@ public class CommentController {
     ;
 
     @PostMapping
-    public Comment create(@RequestBody Comment comment) {
+    public Comment create(Comment comment) {
 
         return repo.save(comment);
 
@@ -42,40 +45,37 @@ public class CommentController {
             repo.deleteById(commentId);
             return true;
 
-        } catch (Exception err) {
+        } catch (Exception exc) {
 
-            System.out.println("Erro ao deletar: " + err);
-            return false;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Comentário não encontrado ", exc);
 
         }
-
 
     }
 
     ;
 
     @PutMapping(path = "/{commentId}")
-    public Object update(@RequestBody Comment newComment, @PathVariable int commentId) {
+    public Comment update(@RequestBody Comment newComment, @PathVariable int commentId) {
 
         try {
 
-            return repo.findById(commentId).map(comment -> {
+            Comment comment = repo.findById(commentId).get();
 
-                comment.setComment(newComment.getComment());
-                return repo.save(newComment);
+            comment.setComment(newComment.getComment());
 
-            });
+            return repo.save(newComment);
 
-        } catch (Exception err) {
+        } catch (Exception exc) {
 
-            System.out.println("Erro ao deletar: " + err);
-            return false;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Comentário não encontrado ", exc);
 
         }
 
     }
 
     ;
-
 
 }

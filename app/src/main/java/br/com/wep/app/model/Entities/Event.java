@@ -36,7 +36,7 @@ public class Event {
     @Column(name = "eventeDate", nullable = false)
     private String eventeDate;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany
     private List<Comment> comments;
 
     @ManyToOne
