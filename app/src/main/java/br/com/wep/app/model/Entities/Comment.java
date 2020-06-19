@@ -10,12 +10,16 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+
     private String comment;
+
     @ManyToOne
     private User user;
+
     @ManyToOne
     private Event event;
+
     private Date createdAt;
 
     @PrePersist
@@ -32,7 +36,7 @@ public class Comment {
         this.event = event;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
