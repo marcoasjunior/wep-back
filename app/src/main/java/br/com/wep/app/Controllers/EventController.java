@@ -16,7 +16,7 @@ public class EventController {
     private EventRepo repo;
 
     @GetMapping
-    public List<Event> getEvent(){
+    public List<Event> getEvents(){
         List<Event> events = (List<Event>) repo.findAll();
         return events;
     }
@@ -29,12 +29,12 @@ public class EventController {
 
     //Deletar evento
     @DeleteMapping(path = "/{event_id}")
-    public boolean deleteEvent(@PathVariable int event_id){
-        try{
-            repo.deleteById(event_id);
+    public boolean deleteEvent(@PathVariable(name = "event_id") int eventID){
+        try {
+            repo.deleteById(eventID);
+
             return true;
-        }catch (Exception e) {
-            System.out.println(e);
+        }catch (Exception e){
             return false;
         }
     }

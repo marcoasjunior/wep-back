@@ -36,14 +36,11 @@ public class Event {
     @Column(name = "eventeDate", nullable = false)
     private String eventeDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "event")
     private List<Comment> comments;
 
     @ManyToOne
     private User user;
-
-    private int confimed;
-
 
     public Event() {
     }
@@ -126,8 +123,8 @@ public class Event {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setComments(Comment comment) {
+        this.comments.add(comment);
     }
 
     public User getUser() {
@@ -138,13 +135,4 @@ public class Event {
         this.user = user;
     }
 
-
-
-    public int getConfimed() {
-        return confimed;
-    }
-
-    public void setConfimed(int confimed) {
-        this.confimed = confimed;
-    }
 }

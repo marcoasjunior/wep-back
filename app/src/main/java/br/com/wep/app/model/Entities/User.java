@@ -1,10 +1,14 @@
 package br.com.wep.app.model.Entities;
 import br.com.wep.app.model.Repos.UserRepo;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "users")
 public class User {
@@ -16,7 +20,7 @@ public class User {
     private String avatar;
     @Column(name = "name", nullable = false, length = 55)
     private String name;
-    @Column(name = "email", nullable = false, length = 60)
+    @Column(name = "email", nullable = false, length = 60, unique = true)
     private String email;
     @Column(name = "password", nullable = false, length = 8)
     private String password;
@@ -25,6 +29,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Event> myEvents;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> myComments;
+
 
     @ManyToMany
     private List<User> friends;
@@ -84,11 +92,27 @@ public class User {
         this.whatssap = whatssap;
     }
 
-    public void setFriend(User friend){
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(User friend) {
         this.friends.add(friend);
     }
 
-    public List<User> getFriends() {
-        return friends;
+    public List<Event> getMyEvents() {
+        return myEvents;
+    }
+
+    public void setMyEvents(Event event) {
+        this.myEvents.add(event);
+    }
+
+    public List<Comment> getMyComments() {
+        return myComments;
+    }
+
+    public void setMyComments(Comment comment) {
+        this.myComments.add(comment);
     }
 }
