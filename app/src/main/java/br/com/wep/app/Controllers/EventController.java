@@ -38,4 +38,19 @@ public class EventController {
             return false;
         }
     }
+
+    //get event ID
+    @GetMapping(path = "/{eventID}")
+    public Event getEventById(@PathVariable(name = "eventID") int eventID){
+        try {
+            Event event = repo.findById(eventID).get();
+//            Event eventFound = event.get();
+
+            return event;
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
 }
