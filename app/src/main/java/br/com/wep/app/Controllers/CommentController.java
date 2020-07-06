@@ -1,6 +1,8 @@
 package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Comment;
+import br.com.wep.app.model.Entities.Event;
+import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,22 +22,26 @@ public class CommentController {
 
     @GetMapping
     public List<Comment> index() {
-
         return (List<Comment>) repo.findAll();
-
-
-    }
-
-    ;
+    };
 
     @PostMapping
-    public Comment create(Comment comment) {
+    public Comment create(@RequestParam(name = "comment") String commentString,
+                          @RequestParam(name = "user") User user,
+                          @RequestParam(name = "event") Event event) {
+        try{
+            Comment comment = new Comment(commentString, user, event);
+            return repo.save(comment);
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+    };
 
-        return repo.save(comment);
-
+    @GetMapping(path = "/{commentId}")
+    public Comment getCommentById(@PathVariable int commentId){
+        return repo.findById(commentId).get();
     }
-
-    ;
 
     @DeleteMapping(path = "/{commentId}")
     public Boolean delete(@PathVariable Integer commentId) {

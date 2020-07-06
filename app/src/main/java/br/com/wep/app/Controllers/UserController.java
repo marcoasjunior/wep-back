@@ -1,14 +1,11 @@
 package br.com.wep.app.Controllers;
 
-import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 //@RestController declara essa classe como um controller
 @RestController
@@ -25,10 +22,8 @@ public class UserController {
         return users;
     }
 
-    //Registro de usuarios...usuario "instanciado" como parametro
-    //FALTA EFETUAR AS VALIDAÇÔES <----------------------
     @PostMapping
-    public User registerUser(User user){
+    public User registerUser(@RequestBody User user){
         try{
             return repo.save(user);
         }catch (Exception e) {
@@ -39,8 +34,12 @@ public class UserController {
 
     @GetMapping(path = "/{userID}")
     public User getUserById(@PathVariable(name = "userID") int userID){
-        User user = repo.findById(userID).get();
-
-        return user;
+        try{
+            User user = repo.findById(userID).get();
+            return user;
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 }

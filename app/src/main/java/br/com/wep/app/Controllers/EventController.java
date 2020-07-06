@@ -2,9 +2,13 @@ package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Repos.EventRepo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +26,16 @@ public class EventController {
     }
 
     //Registrar evento
+    //TODO
+    //fazer com que aceite JSON...o problema está no parse no ID do usuario
     @PostMapping
     public Event registerEvent(Event event){
-        return repo.save(event);
+        try {
+            return repo.save(event);
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 
     //Deletar evento

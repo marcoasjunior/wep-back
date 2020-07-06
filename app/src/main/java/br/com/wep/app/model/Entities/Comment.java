@@ -1,10 +1,14 @@
 package br.com.wep.app.model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "comments")
 public class Comment {
 
@@ -12,7 +16,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "comment", nullable = false, length = 150)
+    @Column(name = "comment", nullable = false)
     private String comment;
 
     @ManyToOne

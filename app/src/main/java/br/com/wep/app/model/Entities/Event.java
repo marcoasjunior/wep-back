@@ -1,5 +1,8 @@
 package br.com.wep.app.model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.List;
 //@Entity diz está classe é uma entidade
 @Entity
 //@Table referencia a table do banco de dados
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "events")
 public class Event {
 
