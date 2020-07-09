@@ -38,11 +38,6 @@ public class CommentController {
         }
     };
 
-    @GetMapping(path = "/{commentId}")
-    public Comment getCommentById(@PathVariable int commentId){
-        return repo.findById(commentId).get();
-    }
-
     @DeleteMapping(path = "/{commentId}")
     public Boolean delete(@PathVariable Integer commentId) {
 
