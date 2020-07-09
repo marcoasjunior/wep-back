@@ -6,5 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 //Repositorio faz a mediação entre o db e os controllers
 public interface UserRepo extends CrudRepository<User, Integer> {
 
-
+    public User getUserByEmail(String email);
 }

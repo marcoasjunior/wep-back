@@ -1,14 +1,11 @@
 package br.com.wep.app.model.Entities;
-import br.com.wep.app.model.Repos.UserRepo;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,7 +19,7 @@ public class User {
     private String name;
     @Column(name = "email", nullable = false, length = 60, unique = true)
     private String email;
-    @Column(name = "password", nullable = false, length = 8)
+    @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "whatssap", nullable = false, length = 11)
     private String whatssap;
@@ -38,6 +35,11 @@ public class User {
     private List<User> friends;
 
     public User() {
+    }
+
+    public User(String email, String password){
+        this.email = email;
+        this.password = password;
     }
 
     public User(String avatar, String name, String email, String password, String whatssap) {
@@ -76,12 +78,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPassword() {
+        return this.password;
     }
 
     public String getWhatssap() {
@@ -114,5 +116,18 @@ public class User {
 
     public void setMyComments(Comment comment) {
         this.myComments.add(comment);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(password, user.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(password);
     }
 }

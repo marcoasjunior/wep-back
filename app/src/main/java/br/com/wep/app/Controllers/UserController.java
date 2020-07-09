@@ -1,14 +1,12 @@
 package br.com.wep.app.Controllers;
 
-import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
-import org.hibernate.exception.ConstraintViolationException;
+import br.com.wep.app.util.md5Password;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 //@RestController declara essa classe como um controller
 @RestController
@@ -25,11 +23,30 @@ public class UserController {
         return users;
     }
 
-    //Registro de usuarios...usuario "instanciado" como parametro
-    //FALTA EFETUAR AS VALIDAÇÔES <----------------------
+    //Recebe um JSON com email e password
+    //Se o usuario não existir retorna uma Exception
+    //Caso somente a senha esteja incorreta retorna null
+    //Se email e senha estejam corretos retorna o id do usuario
+    @PostMapping("/auth")
+    public Integer auth(@RequestBody User user) throws Exception {
+        User foundUser = repo.getUserByEmail(user.getEmail());
+
+        if(foundUser == null){
+            throw new Exception("O usuario não existe");
+        };
+
+        if(foundUser.getPassword().equals(md5Password.md5(user.getPassword()))){
+            return foundUser.getId();
+        };
+
+        return null;
+    }
+
     @PostMapping
-    public User registerUser(User user){
+    public User registerUser(@RequestBody User user){
         try{
+            String password = user.getPassword();
+            user.setPassword(md5Password.md5(password));
             return repo.save(user);
         }catch (Exception e) {
             System.out.println(e);
@@ -39,8 +56,12 @@ public class UserController {
 
     @GetMapping(path = "/{userID}")
     public User getUserById(@PathVariable(name = "userID") int userID){
-        User user = repo.findById(userID).get();
-
-        return user;
+        try{
+            User user = repo.findById(userID).get();
+            return user;
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 }
