@@ -1,6 +1,7 @@
 package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Comment;
+import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Repos.CommentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,5 +78,23 @@ public class CommentController {
     }
 
     ;
+
+    //get comment ID
+    
+    @GetMapping(path = "/find/{commentId}")
+    public Comment getCommentById(@PathVariable(name = "commentId") int commentId){
+
+        try {
+            Comment comment = repo.findById(commentId).get();
+
+            return comment;
+
+        } catch (Exception exc) {
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Comentário não encontrado ", exc);
+
+        }
+    };
 
 }
