@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 //@RestController declara essa classe como um controller
+@CrossOrigin
 @RestController
 //@RequestMapping a rota "mãe" de todas as rotas
 @RequestMapping(path = "/user")
