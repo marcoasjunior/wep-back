@@ -28,6 +28,7 @@ public class UserController {
     //Se o usuario não existir retorna uma Exception
     //Caso somente a senha esteja incorreta retorna null
     //Se email e senha estejam corretos retorna o id do usuario
+    @CrossOrigin
     @PostMapping("/auth")
     public Integer auth(@RequestBody User user) throws Exception {
         User foundUser = repo.getUserByEmail(user.getEmail());
