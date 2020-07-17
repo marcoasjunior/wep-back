@@ -28,5 +28,4 @@ public class TokenService {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 }

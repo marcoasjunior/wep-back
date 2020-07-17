@@ -42,7 +42,7 @@ public class UserController {
         if(!foundUser.getPassword().equals(md5Password.md5(user.getPassword()))){
             throw new CredentialException("Algo errado com as informações inseridas!");
         };
-        
+
         if(Authentication.isEmpty()){ // se o token ñ existir é gerado um novo
             return tokenService.generateToken(foundUser);
         }else{ // else valida o token...case true retorna o Payload
@@ -72,5 +72,23 @@ public class UserController {
             System.out.println(e);
             return null;
         }
+    }
+
+    @DeleteMapping(path = "/{userID}")
+    public boolean deleteUser(@PathVariable Integer userID, @RequestHeader String Authentication) throws Exception{
+
+        String token = tokenService.decodeToken(Authentication).getSubject();
+        User user = repo.getUserByEmail(token);
+
+        if(user == null){
+            throw new CredentialException("Acesso negado");
+        };
+
+        if(!userID.equals(user.getId())){
+            throw new CredentialException("Acesso negado");
+        };
+
+        repo.deleteById(userID);
+        return true;
     }
 }
