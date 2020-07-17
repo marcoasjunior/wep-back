@@ -40,6 +40,12 @@ public class Event {
     @Column(name = "eventeDate", nullable = false)
     private String eventeDate;
 
+    @Column(name = "latitude", nullable = false)
+    private String latitude;
+
+    @Column(name = "longitude", nullable = false)
+    private String longitude;
+
     @OneToMany(mappedBy = "event")
     private List<Comment> comments;
 
@@ -49,13 +55,21 @@ public class Event {
     public Event() {
     }
 
-    public Event(String title, String description, String adress, String img, boolean privated, String eventeDate, User user) {
+    public Event(
+            String title, String description,
+            String adress, String img,
+            boolean privated, String eventeDate,
+            String latitude, String longitude,
+            User user
+    ) {
         this.title = title;
         this.description = description;
         this.adress = adress;
         this.img = img;
         this.privated = privated;
         this.eventeDate = eventeDate;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.user = user;
     }
 
@@ -121,6 +135,22 @@ public class Event {
 
     public void setEventeDate(String eventeDate) {
         this.eventeDate = eventeDate;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public List<Comment> getComments() {
