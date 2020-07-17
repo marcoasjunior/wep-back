@@ -1,8 +1,11 @@
-package br.com.wep.app.util;
+package br.com.wep.app.config;
+
+import org.springframework.context.annotation.Configuration;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
+@Configuration
 public class md5Password {
     public static String md5(String pass){
         String message = "";

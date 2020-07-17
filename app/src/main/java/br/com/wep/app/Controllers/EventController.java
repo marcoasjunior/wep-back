@@ -7,13 +7,14 @@ import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/event")
+@RequestMapping(path = "/api/event")
 public class EventController {
 
     @Autowired
@@ -43,7 +44,6 @@ public class EventController {
     public boolean deleteEvent(@PathVariable(name = "event_id") int eventID){
         try {
             repo.deleteById(eventID);
-
             return true;
         }catch (Exception e){
             return false;
@@ -64,4 +64,5 @@ public class EventController {
         }
         return null;
     }
+
 }
