@@ -50,6 +50,7 @@ public class UserController {
             String password = user.getPassword();
             user.setPassword(md5Password.md5(password));
             return repo.save(user);
+
         }catch (Exception e) {
             System.out.println(e);
         }

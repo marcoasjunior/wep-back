@@ -21,8 +21,8 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "whatssap", nullable = false, length = 11)
-    private String whatssap;
+    @Column(name = "whatsapp", nullable = false, length = 11)
+    private String whatsapp;
 
     @OneToMany(mappedBy = "user")
     private List<Event> myEvents;
@@ -37,17 +37,19 @@ public class User {
     public User() {
     }
 
+    //Auth user
     public User(String email, String password){
         this.email = email;
         this.password = password;
     }
 
-    public User(String avatar, String name, String email, String password, String whatssap) {
+    //Register user
+    public User(String avatar, String name, String email, String password, String whatsapp) {
         this.avatar = avatar;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.whatssap = whatssap;
+        this.whatsapp = whatsapp;
     }
 
     public Integer getId() {
@@ -86,12 +88,12 @@ public class User {
         return this.password;
     }
 
-    public String getWhatssap() {
-        return whatssap;
+    public String getWhatsapp() {
+        return whatsapp;
     }
 
-    public void setWhatssap(String whatssap) {
-        this.whatssap = whatssap;
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
     }
 
     public List<User> getFriends() {
