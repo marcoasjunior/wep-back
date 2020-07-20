@@ -31,7 +31,7 @@ public class UserController {
     //Recebe um JSON com email e password
     @CrossOrigin
     @PostMapping("/auth")
-    public Object auth(@RequestBody User user, @RequestHeader String Authentication) throws Exception {
+    public Object auth(@RequestBody User user, @RequestHeader(required = false) String Authentication) throws Exception {
 
         User foundUser = repo.getUserByEmail(user.getEmail());
 
@@ -43,7 +43,7 @@ public class UserController {
             throw new CredentialException("Algo errado com as informações inseridas!");
         };
 
-        if(Authentication.isEmpty()){ // se o token ñ existir é gerado um novo
+        if(Authentication == null){ // se o token ñ existir é gerado um novo
             return tokenService.generateToken(foundUser);
         }else{ // else valida o token...case true retorna o Payload
             return tokenService.decodeToken(Authentication);
