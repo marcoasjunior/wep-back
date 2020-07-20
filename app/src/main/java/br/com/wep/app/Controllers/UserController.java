@@ -50,6 +50,16 @@ public class UserController {
         }
     }
 
+    @CrossOrigin
+    @PostMapping("/authToken")
+    public Object authToken(@RequestBody String Authentication) throws Exception {
+        try {
+            return TokenService.decodeToken(Authentication);
+        } catch (Exception e) {
+            return e;
+        }
+    }
+
     @PostMapping
     public User registerUser(@RequestBody User user){
         try{
@@ -59,8 +69,9 @@ public class UserController {
 
         }catch (Exception e) {
             System.out.println(e);
+            return null;
         }
-        return null;
+
     }
 
     @GetMapping(path = "/{userID}")
