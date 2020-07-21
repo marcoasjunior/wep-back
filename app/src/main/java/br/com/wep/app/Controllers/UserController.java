@@ -5,7 +5,9 @@ import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
 import br.com.wep.app.config.md5Password;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.security.auth.login.CredentialException;
 import java.util.List;
@@ -64,14 +66,21 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userID}")
-    public User getUserById(@PathVariable(name = "userID") int userID){
-        try{
-            User user = repo.findById(userID).get();
-            return user;
-        }catch (Exception e){
-            System.out.println(e);
-            return null;
-        }
+    public User getUserById(@PathVariable(name = "userID") int userID,
+                            @RequestHeader String Authentication) throws Exception{
+
+        User token = repo.getUserByEmail(tokenService.decodeToken(Authentication).getSubject());
+        User user = repo.findById(userID).get();
+
+        if(token == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        };
+
+        if(!(token == user)){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        };
+
+        return user;
     }
 
     @DeleteMapping(path = "/{userID}")
