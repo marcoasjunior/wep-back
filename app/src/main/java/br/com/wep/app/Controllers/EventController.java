@@ -32,7 +32,7 @@ public class EventController {
 
     //Registrar evento
     @PostMapping
-    public Event registerEvent(@RequestBody Event event){
+    public Event registerEvent(Event event){
         try {
             return repo.save(event);
         }catch (Exception e){
@@ -91,5 +91,22 @@ public class EventController {
 
     //TODO
     //Fazer um get com parametro de evento privado ou publico
+    @GetMapping(path = "/params")
+    public List<Event>getEventByPrivateParams(@RequestParam (name = "privated") boolean privated){
+        try {
 
+            List<Event> events = repo.getEventByPrivated(privated);
+
+//            Event event = repo.findById(privated).get();
+//            Event eventFound = event.get();
+
+//            System.out.println(event);
+
+            return events;
+
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
 }
