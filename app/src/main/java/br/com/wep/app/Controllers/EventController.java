@@ -2,6 +2,7 @@ package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Repos.EventRepo;
+import br.com.wep.app.model.Repos.UserRepo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class EventController {
 
     @Autowired
     private EventRepo repo;
+    private UserRepo userRepo;
 
     @GetMapping
     public List<Event> getEvents(){
@@ -27,8 +29,6 @@ public class EventController {
     }
 
     //Registrar evento
-    //TODO
-    //fazer com que aceite JSON...o problema está no parse no ID do usuario
     @PostMapping
     public Event registerEvent(Event event){
         try {
@@ -41,7 +41,8 @@ public class EventController {
 
     //Deletar evento
     @DeleteMapping(path = "/{event_id}")
-    public boolean deleteEvent(@PathVariable(name = "event_id") int eventID){
+    public boolean deleteEvent(@PathVariable(name = "event_id") int eventID,
+                               @RequestHeader String Authentication){
         try {
             repo.deleteById(eventID);
             return true;

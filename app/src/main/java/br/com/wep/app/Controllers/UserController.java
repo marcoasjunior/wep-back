@@ -80,18 +80,25 @@ public class UserController {
     public User getUserById(@PathVariable(name = "userID") int userID,
                             @RequestHeader String Authentication) throws Exception{
 
-        User token = repo.getUserByEmail(tokenService.decodeToken(Authentication).getSubject());
-        User user = repo.findById(userID).get();
+        try{
+            User token = repo.getUserByEmail(tokenService.decodeToken(Authentication).getSubject());
+            User user = repo.findById(userID).get();
 
-        if(token == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        };
+            if (token == null) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+            ;
 
-        if(!(token == user)){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        };
+            if (!(token == user)) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+            }
+            ;
 
-        return user;
+            return user;
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return null;
     }
 
     @DeleteMapping(path = "/{userID}")
