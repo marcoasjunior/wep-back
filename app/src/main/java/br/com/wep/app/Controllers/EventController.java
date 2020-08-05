@@ -48,11 +48,17 @@ public class EventController {
 
             Event eventId = repo.findById(eventID).get();
 
+
+            eventId.setTitle(newEvent.getTitle());
+            eventId.setDescription(newEvent.getDescription());
+            eventId.setAdress(newEvent.getAdress());
+            eventId.setImg(newEvent.getImg());
+            eventId.setPrivated(newEvent.getPrivated());
             eventId.setEventeDate(newEvent.getEventeDate());
+            eventId.setLatitude(newEvent.getLatitude());
+            eventId.setLongitude(newEvent.getLongitude());
 
             return repo.save(eventId);
-
-//            comment.setComment(newComment.getComment());
 
 
         }catch (Exception exc){
@@ -89,9 +95,9 @@ public class EventController {
         return null;
     }
 
-    //TODO
+
     //Fazer um get com parametro de evento privado ou publico
-    @GetMapping(path = "/params")
+    @GetMapping(path = "/event")
     public List<Event>getEventByPrivateParams(@RequestParam (name = "privated") boolean privated){
         try {
 

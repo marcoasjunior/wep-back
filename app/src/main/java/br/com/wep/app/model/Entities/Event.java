@@ -113,7 +113,7 @@ public class Event {
         this.img = img;
     }
 
-    public boolean isPrivated() {
+    public boolean getPrivated() {
         return privated;
     }
 
