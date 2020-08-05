@@ -5,9 +5,11 @@ import br.com.wep.app.model.Repos.EventRepo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URL;
 import java.util.List;
@@ -20,7 +22,7 @@ public class EventController {
     @Autowired
     private EventRepo repo;
 
-    @GetMapping
+    @GetMapping(path = "/list")
     public List<Event> getEvents(){
         List<Event> events = (List<Event>) repo.findAll();
         return events;
@@ -30,7 +32,7 @@ public class EventController {
     //TODO
     //fazer com que aceite JSON...o problema está no parse no ID do usuario
     @PostMapping
-    public Event registerEvent(Event event){
+    public Event registerEvent(@RequestBody Event event){
         try {
             return repo.save(event);
         }catch (Exception e){
@@ -38,6 +40,27 @@ public class EventController {
             return null;
         }
     }
+
+    //Update Event
+    @PutMapping(path = "/{eventID}")
+    public Event updateEvent(@RequestBody Event newEvent,  @PathVariable int eventID){
+        try {
+
+            Event eventId = repo.findById(eventID).get();
+
+            eventId.setEventeDate(newEvent.getEventeDate());
+
+            return repo.save(eventId);
+
+//            comment.setComment(newComment.getComment());
+
+
+        }catch (Exception exc){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
+        }
+    }
+
 
     //Deletar evento
     @DeleteMapping(path = "/{event_id}")
@@ -64,5 +87,8 @@ public class EventController {
         }
         return null;
     }
+
+    //TODO
+    //Fazer um get com parametro de evento privado ou publico
 
 }
