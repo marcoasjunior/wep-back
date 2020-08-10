@@ -56,7 +56,7 @@ public class UserController {
     @PostMapping("/authToken")
     public Object authToken(@RequestBody String Authentication) throws Exception {
         try {
-            return TokenService.decodeToken(Authentication);
+            return tokenService.decodeToken(Authentication).getSubject();
         } catch (Exception e) {
             return e;
         }
@@ -78,7 +78,7 @@ public class UserController {
 
     @GetMapping(path = "/{userID}")
     public User getUserById(@PathVariable(name = "userID") int userID,
-                            @RequestHeader String Authentication) throws Exception{
+                            @RequestHeader(name = "Authentication") String Authentication) throws Exception{
 
         try{
             User token = repo.getUserByEmail(tokenService.decodeToken(Authentication).getSubject());
@@ -89,7 +89,7 @@ public class UserController {
             }
             ;
 
-            if (!(token == user)) {
+            if (!(token.getEmail() == user.getEmail()) && !(token.getId() == user.getId())) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             }
             ;
@@ -97,6 +97,20 @@ public class UserController {
             return user;
         }catch (Exception e){
             System.out.println(e);
+        }
+        return null;
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/mail/{user_email}")
+    public User getUserByEmail(@PathVariable String user_email){
+        try{
+            User user = repo.getUserByEmail(user_email);
+            //user.setPassword(null);
+
+            return user;
+        }catch (Exception e){
+            System.out.println("erro: " + e);
         }
         return null;
     }
