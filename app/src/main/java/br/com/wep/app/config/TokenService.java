@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class TokenService {
 
-    private static final long expirationTime = 1800000;
+    private static final long expirationTime = 6600000;
     private static final String key = "secretKey"; //tranformar em variavel de ambiente
     @Autowired
     private static UserRepo repo;

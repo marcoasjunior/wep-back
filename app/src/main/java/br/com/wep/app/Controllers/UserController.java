@@ -4,12 +4,15 @@ import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
 import br.com.wep.app.config.md5Password;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.TransactionRequiredException;
 import javax.security.auth.login.CredentialException;
+import java.sql.SQLOutput;
 import java.util.List;
 
 //@RestController declara essa classe como um controller
@@ -106,8 +109,6 @@ public class UserController {
     public User getUserByEmail(@PathVariable String user_email){
         try{
             User user = repo.getUserByEmail(user_email);
-            //user.setPassword(null);
-
             return user;
         }catch (Exception e){
             System.out.println("erro: " + e);
@@ -131,5 +132,26 @@ public class UserController {
 
         repo.deleteById(userID);
         return true;
+    }
+
+    //alterar usuario
+    @PutMapping
+    public Object updateUser(@RequestBody User newUser, @RequestHeader String Authentication){
+        try{
+            String token = tokenService.decodeToken(Authentication).getSubject();
+            User user = repo.getUserByEmail(token);
+
+            user.setAvatar(newUser.getAvatar());
+            user.setName(newUser.getName());
+            user.setEmail(newUser.getEmail());
+            user.setPassword(md5Password.md5(newUser.getPassword()));
+            user.setWhatsapp(newUser.getWhatsapp());
+
+            repo.save(user);
+            return true;
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
     }
 }
