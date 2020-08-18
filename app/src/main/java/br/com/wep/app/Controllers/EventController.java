@@ -1,6 +1,7 @@
 package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Event;
+import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.EventRepo;
 import br.com.wep.app.model.Repos.UserRepo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
@@ -23,6 +24,7 @@ public class EventController {
 
     @Autowired
     private EventRepo repo;
+    @Autowired
     private UserRepo userRepo;
 
     @GetMapping(path = "/list")
@@ -37,7 +39,10 @@ public class EventController {
     public Event registerEvent(@RequestBody Event event){
         try {
 //            return repo.save(event);
-            return event;
+            User user = userRepo.findById(event.getUser().getId()).get();
+            event.setUser(user);
+
+            return repo.save(event);
 
         }catch (Exception e){
             System.out.println(e);
