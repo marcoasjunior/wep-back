@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
@@ -31,13 +32,19 @@ public class EventController {
     }
 
     //Registrar evento
-    @PostMapping
-    public Event registerEvent(Event event){
+    @PostMapping (value="/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+
+    public Event registerEvent(@RequestBody Event event){
         try {
+
             return repo.save(event);
-        }catch (Exception e){
-            System.out.println(e);
-            return null;
+
+        }catch (Exception exc){
+
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Evento não criado ", exc);
+
         }
     }
 
@@ -54,7 +61,7 @@ public class EventController {
             eventId.setAdress(newEvent.getAdress());
             eventId.setImg(newEvent.getImg());
             eventId.setPrivated(newEvent.getPrivated());
-            eventId.setEventeDate(newEvent.getEventeDate());
+            eventId.setEventDate(newEvent.getEventDate());
             eventId.setLatitude(newEvent.getLatitude());
             eventId.setLongitude(newEvent.getLongitude());
 

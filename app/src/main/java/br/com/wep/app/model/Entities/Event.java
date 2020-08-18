@@ -37,8 +37,8 @@ public class Event {
         createdAt = new Date();
     }
 
-    @Column(name = "eventeDate", nullable = false)
-    private String eventeDate;
+    @Column(name = "eventDate", nullable = false)
+    private String eventDate;
 
     @Column(name = "latitude", nullable = false)
     private String latitude;
@@ -50,7 +50,7 @@ public class Event {
     private List<Comment> comments;
 
     @ManyToOne
-    private User user;
+    private User user_id;
 
     public Event() {
     }
@@ -58,7 +58,7 @@ public class Event {
     public Event(
             String title, String description,
             String adress, String img,
-            boolean privated, String eventeDate,
+            boolean privated, String eventDate,
             String latitude, String longitude,
             User user
     ) {
@@ -67,10 +67,10 @@ public class Event {
         this.adress = adress;
         this.img = img;
         this.privated = privated;
-        this.eventeDate = eventeDate;
+        this.eventDate = eventDate;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.user = user;
+        this.user_id = user;
     }
 
     public Integer getId() {
@@ -129,12 +129,12 @@ public class Event {
         this.createdAt = createdAt;
     }
 
-    public String getEventeDate() {
-        return eventeDate;
+    public String getEventDate() {
+        return eventDate;
     }
 
-    public void setEventeDate(String eventeDate) {
-        this.eventeDate = eventeDate;
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
     }
 
     public String getLatitude() {
@@ -162,11 +162,11 @@ public class Event {
     }
 
     public User getUser() {
-        return user;
+        return user_id;
     }
 
     public void setUser(User user) {
-        this.user = user;
+        this.user_id = user;
     }
 
 }
