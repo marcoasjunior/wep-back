@@ -1,7 +1,6 @@
 package br.com.wep.app.Controllers;
 
 import br.com.wep.app.model.Entities.Event;
-import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.EventRepo;
 import br.com.wep.app.model.Repos.UserRepo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
