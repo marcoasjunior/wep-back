@@ -48,11 +48,10 @@ public class UserController {
             throw new CredentialException("Algo errado com as informações inseridas!");
         };
 
-        if(Authentication == null){ // se o token ñ existir é gerado um novo
+
             return tokenService.generateToken(foundUser);
-        }else{ // else valida o token...case true retorna o Payload
-            return tokenService.decodeToken(Authentication);
-        }
+
+
     }
 
     @CrossOrigin
@@ -144,7 +143,9 @@ public class UserController {
             user.setAvatar(newUser.getAvatar());
             user.setName(newUser.getName());
             user.setEmail(newUser.getEmail());
-            user.setPassword(md5Password.md5(newUser.getPassword()));
+            if(newUser.getPassword() != ""){
+                user.setPassword(md5Password.md5(newUser.getPassword()));
+                System.out.println("A");}
             user.setWhatsapp(newUser.getWhatsapp());
 
             repo.save(user);

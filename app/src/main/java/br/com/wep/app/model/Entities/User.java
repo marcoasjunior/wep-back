@@ -1,5 +1,6 @@
 package br.com.wep.app.model.Entities;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 import java.util.List;
@@ -25,6 +26,7 @@ public class User {
     private String whatsapp;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     private List<Event> myEvents;
 
     @OneToMany(mappedBy = "user")

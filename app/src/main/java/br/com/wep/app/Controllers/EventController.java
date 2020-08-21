@@ -1,5 +1,6 @@
 package br.com.wep.app.Controllers;
 
+import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.EventRepo;
@@ -123,5 +124,19 @@ public class EventController {
             System.out.println(e);
         }
         return null;
+    }
+
+    @GetMapping(path = "/user")
+    @ResponseBody
+    public List<Event> getEventByUser(@RequestHeader String Authentication) {
+        try{
+            String token = TokenService.decodeToken(Authentication).getSubject();
+            User user = userRepo.getUserByEmail(token);
+
+            return user.getMyEvents();
+        }catch (Exception e){
+            System.out.println(e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
     }
 }
