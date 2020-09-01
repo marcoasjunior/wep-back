@@ -4,6 +4,8 @@ import br.com.wep.app.model.Entities.Comment;
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.CommentRepo;
+import br.com.wep.app.model.Repos.EventRepo;
+import br.com.wep.app.model.Repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,10 @@ public class CommentController {
 
     @Autowired
     private CommentRepo repo;
+    @Autowired
+    private UserRepo userRepo;
+    @Autowired
+    private EventRepo eventRepo;
 
 
     @GetMapping
@@ -26,11 +32,14 @@ public class CommentController {
     };
 
     @PostMapping
-    public Comment create(@RequestParam(name = "comment") String commentString,
-                          @RequestParam(name = "user") User user,
-                          @RequestParam(name = "event") Event event) {
+    public Comment create(@RequestBody Comment comment) {
         try{
-            Comment comment = new Comment(commentString, user, event);
+            Event event = eventRepo.findById(comment.getEvent().getId()).get();
+            User user = userRepo.findById(comment.getUser().getId()).get();
+
+            comment.setEvent(event);
+            comment.setUser(user);
+
             return repo.save(comment);
         }catch (Exception e){
             System.out.println(e);

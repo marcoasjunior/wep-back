@@ -2,6 +2,7 @@ package br.com.wep.app.model.Entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -48,10 +49,11 @@ public class Event {
     private String longitude;
 
     @OneToMany(mappedBy = "event")
+    //@JsonManagedReference
     private List<Comment> comments;
 
     @ManyToOne
-    @JsonBackReference
+    //@JsonManagedReference
     private User user;
 
     public Event() {

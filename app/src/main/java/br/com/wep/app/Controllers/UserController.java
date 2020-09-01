@@ -36,7 +36,7 @@ public class UserController {
     //Recebe um JSON com email e password
     @CrossOrigin
     @PostMapping("/auth")
-    public Object auth(@RequestBody User user, @RequestHeader(required = false) String Authentication) throws Exception {
+    public Object auth(@RequestBody User user) throws Exception {
 
         User foundUser = repo.getUserByEmail(user.getEmail());
 
@@ -48,10 +48,7 @@ public class UserController {
             throw new CredentialException("Algo errado com as informações inseridas!");
         };
 
-
-            return tokenService.generateToken(foundUser);
-
-
+        return tokenService.generateToken(foundUser);
     }
 
     @CrossOrigin

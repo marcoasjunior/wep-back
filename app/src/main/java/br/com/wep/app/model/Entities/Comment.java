@@ -1,14 +1,13 @@
 package br.com.wep.app.model.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "comments")
 public class Comment {
 
@@ -20,9 +19,11 @@ public class Comment {
     private String comment;
 
     @ManyToOne
+    ///@JsonManagedReference
     private User user;
 
     @ManyToOne
+    //@JsonBackReference
     private Event event;
 
     private Date createdAt;
@@ -61,6 +62,7 @@ public class Comment {
         this.user = user;
     }
 
+    @JsonIgnore
     public Event getEvent() {
         return event;
     }

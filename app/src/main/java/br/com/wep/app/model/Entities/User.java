@@ -1,7 +1,6 @@
 package br.com.wep.app.model.Entities;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -26,10 +25,11 @@ public class User {
     private String whatsapp;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
+    //@JsonBackReference
     private List<Event> myEvents;
 
     @OneToMany(mappedBy = "user")
+    //@JsonBackReference
     private List<Comment> myComments;
 
 
@@ -106,6 +106,7 @@ public class User {
         this.friends.add(friend);
     }
 
+    @JsonIgnore
     public List<Event> getMyEvents() {
         return myEvents;
     }
@@ -114,6 +115,7 @@ public class User {
         this.myEvents.add(event);
     }
 
+    @JsonIgnore
     public List<Comment> getMyComments() {
         return myComments;
     }
