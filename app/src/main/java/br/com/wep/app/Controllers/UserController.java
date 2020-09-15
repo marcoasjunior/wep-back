@@ -4,15 +4,12 @@ import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
 import br.com.wep.app.config.md5Password;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.TransactionRequiredException;
 import javax.security.auth.login.CredentialException;
-import java.sql.SQLOutput;
 import java.util.List;
 
 //@RestController declara essa classe como um controller
@@ -137,19 +134,22 @@ public class UserController {
             String token = tokenService.decodeToken(Authentication).getSubject();
             User user = repo.getUserByEmail(token);
 
-            user.setAvatar(newUser.getAvatar());
+            if(newUser.getAvatar() != ""){
+                user.setAvatar(newUser.getAvatar());
+                System.out.println("A");
+            }
             user.setName(newUser.getName());
             user.setEmail(newUser.getEmail());
             if(newUser.getPassword() != ""){
                 user.setPassword(md5Password.md5(newUser.getPassword()));
-                System.out.println("A");}
+            }
             user.setWhatsapp(newUser.getWhatsapp());
 
             repo.save(user);
-            return true;
+
+            return tokenService.generateToken(user);
         }catch (Exception e){
-            System.out.println(e);
-            return false;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 }
