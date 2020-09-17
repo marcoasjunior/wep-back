@@ -27,7 +27,7 @@ public class Event {
     private String description;
     @Column(name = "adress", nullable = true, length = 100)
     private String adress;
-    @Column(name = "img", nullable = false, length = 200)
+    @Column(name = "img", columnDefinition = "TEXT")
     private String img;
     @Column(name = "privated", nullable = false)
     private boolean privated;
