@@ -45,9 +45,9 @@ public class EventController {
 
             return repo.save(event);
 
-        }catch (Exception e){
-            System.out.println(e);
-            return null;
+        }catch (Exception exc){
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Evento não Criado ", exc);
         }
     }
 
