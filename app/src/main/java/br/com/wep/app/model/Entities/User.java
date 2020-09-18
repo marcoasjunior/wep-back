@@ -32,7 +32,6 @@ public class User {
     //@JsonBackReference
     private List<Comment> myComments;
 
-
     @ManyToMany
     private List<User> friends;
 

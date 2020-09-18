@@ -4,12 +4,15 @@ import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
 import br.com.wep.app.config.md5Password;
+import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.security.auth.login.CredentialException;
+import java.util.ArrayList;
 import java.util.List;
 
 //@RestController declara essa classe como um controller
@@ -33,7 +36,7 @@ public class UserController {
     //Recebe um JSON com email e password
     @CrossOrigin
     @PostMapping("/auth")
-    public Object auth(@RequestBody User user) throws Exception {
+    public List<Object> auth(@RequestBody User user) throws Exception {
 
         User foundUser = repo.getUserByEmail(user.getEmail());
 
@@ -45,7 +48,14 @@ public class UserController {
             throw new CredentialException("Algo errado com as informações inseridas!");
         };
 
-        return tokenService.generateToken(foundUser);
+//        JSONObject obj = new JSONObject();
+//        obj.put("token", tokenService.generateToken(foundUser));
+
+        List<Object> retornos = new ArrayList<>();
+        retornos.add(tokenService.generateToken(foundUser));
+        retornos.add(foundUser.getId());
+
+        return retornos;
     }
 
     @CrossOrigin
@@ -152,4 +162,14 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
+//    @PutMapping(path = "/friends/{user_id}")
+//    public Object doFollow(@RequestHeader String Authentication){
+//        try{
+//            String token = tokenService.decodeToken(Authentication).getSubject();
+//            User user = repo.getUserByEmail(token);
+//        }catch (Exception){
+//
+//        }
+//    }
 }
