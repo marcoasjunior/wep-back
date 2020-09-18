@@ -105,6 +105,10 @@ public class User {
         this.friends.add(friend);
     }
 
+    public void removeFriend(User friend){
+        this.friends.remove(friend);
+    }
+
     @JsonIgnore
     public List<Event> getMyEvents() {
         return myEvents;

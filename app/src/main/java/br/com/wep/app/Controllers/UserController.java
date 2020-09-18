@@ -4,10 +4,8 @@ import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
 import br.com.wep.app.config.md5Password;
-import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -163,13 +161,44 @@ public class UserController {
         }
     }
 
-//    @PutMapping(path = "/friends/{user_id}")
-//    public Object doFollow(@RequestHeader String Authentication){
-//        try{
-//            String token = tokenService.decodeToken(Authentication).getSubject();
-//            User user = repo.getUserByEmail(token);
-//        }catch (Exception){
-//
-//        }
-//    }
+    @PutMapping(path = "/friends/{user_id}")
+    public User doFollow(@PathVariable int user_id, @RequestHeader String Authentication) throws Exception{
+        try{
+            String token = tokenService.decodeToken(Authentication).getSubject();
+            User user = repo.getUserByEmail(token);
+            User newFriend = repo.findById(user_id).get();
+
+            if(user == null){
+                throw new CredentialException("Acesso negado");
+            }
+
+            user.setFriends(newFriend);
+
+            return repo.save(user);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    @DeleteMapping(path = "/friends/{user_id}")
+    public Object doUnfollow(@PathVariable int user_id, @RequestHeader String Authentication)throws Exception{
+
+            try{
+                String token = tokenService.decodeToken(Authentication).getSubject();
+                User user = repo.getUserByEmail(token);
+                User newFriend = repo.findById(user_id).get();
+
+                if(user == null){
+                    throw new CredentialException("Acesso negado");
+                }
+
+                user.removeFriend(newFriend);
+
+                return repo.save(user);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+            return null;
+    }
 }
