@@ -125,6 +125,7 @@ public class Event {
         this.privated = privated;
     }
 
+
     public Date getCreatedAt() {
         return createdAt;
     }

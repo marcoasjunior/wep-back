@@ -36,11 +36,16 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(String comment, User user, Event event) {
+    public Comment(String comment){
         this.comment = comment;
-        this.user = user;
-        this.event = event;
     }
+
+    public Comment(String comment, Event event, User user) {
+        this.comment = comment;
+        this.event = event;
+        this.user = user;
+    }
+
 
     public int getId() {
         return id;

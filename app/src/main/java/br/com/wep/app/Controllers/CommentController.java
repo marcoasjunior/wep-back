@@ -1,11 +1,14 @@
 package br.com.wep.app.Controllers;
 
+import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.Comment;
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.CommentRepo;
 import br.com.wep.app.model.Repos.EventRepo;
 import br.com.wep.app.model.Repos.UserRepo;
+import org.apache.tomcat.util.json.JSONParser;
+import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,27 +28,32 @@ public class CommentController {
     @Autowired
     private EventRepo eventRepo;
 
+    private TokenService tokenService;
 
     @GetMapping
     public List<Comment> index() {
         return (List<Comment>) repo.findAll();
     };
 
-    @PostMapping
-    public Comment create(@RequestBody Comment comment) {
+    @PostMapping("/{event_id}")
+    public Object create(
+            @PathVariable(name = "event_id") int event_id,
+            @RequestBody Comment comment,
+            @RequestHeader String Authentication
+    ){
         try{
-            Event event = eventRepo.findById(comment.getEvent().getId()).get();
-            User user = userRepo.findById(comment.getUser().getId()).get();
+            Event event = eventRepo.findById(event_id).get();
+            String token = tokenService.decodeToken(Authentication).getSubject();
+            User user = userRepo.getUserByEmail(token);
 
-            comment.setEvent(event);
-            comment.setUser(user);
+            Comment newComment = new Comment(comment.getComment(), event, user);
 
-            return repo.save(comment);
+            return repo.save(newComment);
         }catch (Exception e){
             System.out.println(e);
             return null;
         }
-    };
+    }
 
     @DeleteMapping(path = "/{commentId}")
     public Boolean delete(@PathVariable Integer commentId) {
