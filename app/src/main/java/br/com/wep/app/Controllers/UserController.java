@@ -58,11 +58,13 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping("/authToken")
-    public Object authToken(@RequestBody String Authentication) throws Exception {
+    public Object authToken(@RequestHeader String Authentication) throws Exception {
+
         try {
-            return tokenService.decodeToken(Authentication).getSubject();
-        } catch (Exception e) {
-            return e;
+            return tokenService.decodeToken(Authentication);
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
         }
     }
 
@@ -105,17 +107,18 @@ public class UserController {
         return null;
     }
 
-    @CrossOrigin
-    @GetMapping(path = "/mail/{user_email}")
-    public User getUserByEmail(@PathVariable String user_email){
-        try{
-            User user = repo.getUserByEmail(user_email);
-            return user;
-        }catch (Exception e){
-            System.out.println("erro: " + e);
-        }
-        return null;
-    }
+
+//    @GetMapping(path = "/mail/{user_email}")
+//    @CrossOrigin
+//    public User getUserByEmail(@PathVariable String user_email){
+//        try{
+//            User user = repo.getUserByEmail(user_email);
+//            return user;
+//        }catch (Exception e){
+//            System.out.println("erro: " + e);
+//        }
+//        return null;
+//    }
 
     @DeleteMapping(path = "/{userID}")
     public boolean deleteUser(@PathVariable Integer userID, @RequestHeader String Authentication) throws Exception{
@@ -159,6 +162,16 @@ public class UserController {
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/this")
+    public Object getThisUser(@RequestHeader String Authentication){
+
+        User user = repo.getUserByEmail(tokenService.decodeToken(Authentication).getSubject());
+
+        if(user == null) return false;
+
+        return user;
     }
 
     @PutMapping(path = "/friends/{user_id}")
