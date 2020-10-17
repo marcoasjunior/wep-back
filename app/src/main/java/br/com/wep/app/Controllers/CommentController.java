@@ -1,5 +1,6 @@
 package br.com.wep.app.Controllers;
 
+import br.com.wep.app.Services.Entities.CommentService;
 import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.Comment;
 import br.com.wep.app.model.Entities.Event;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.Authenticator;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class CommentController {
     private UserRepo userRepo;
     @Autowired
     private EventRepo eventRepo;
-
+    private CommentService commentService;
     private TokenService tokenService;
 
     @GetMapping
@@ -56,20 +58,11 @@ public class CommentController {
     }
 
     @DeleteMapping(path = "/{commentId}")
-    public Boolean delete(@PathVariable Integer commentId) {
+    public void delete(@PathVariable Integer commentId, @RequestHeader String Authentication) throws Exception {
 
-        try {
+        Boolean response = commentService.delete(commentId, Authentication);
 
-            repo.deleteById(commentId);
-            return true;
-
-        } catch (Exception exc) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Comentário não encontrado ", exc);
-
-        }
-
+        System.out.println(response);
     }
 
     ;

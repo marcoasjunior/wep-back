@@ -10,7 +10,8 @@ import java.util.Map;
 public class CloudinaryService {
 
     private Cloudinary configCloudinary() {
-
+        //TODO
+        //@Value("${userBucket.path}")
         Map config = new HashMap();
         config.put("cloud_name", "dxblalpv2");
         config.put("api_key", "533837714717359");
