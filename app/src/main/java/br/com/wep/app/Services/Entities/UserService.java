@@ -52,4 +52,15 @@ public class UserService {
 
         return user.getFollowers();
     }
+
+    public User doFollow(int new_follow_id, String auth){
+        User user = userRepo.getUserByEmail(tokenService.decodeToken(auth).getSubject());
+        User new_follow_user = userRepo.findById(new_follow_id).get();
+
+        user.setFollowing(new_follow_user);
+        new_follow_user.setFollowers(user);
+
+        userRepo.save(new_follow_user);
+        return userRepo.save(user);
+    }
 }

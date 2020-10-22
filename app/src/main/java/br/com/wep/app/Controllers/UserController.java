@@ -173,9 +173,16 @@ public class UserController {
         return userService.getFollowing(user_id, Authentication);
     }
 
-    @GetMapping("/{user_id/followers")
+    @GetMapping("/{user_id}/followers")
     public List<User> getFollowers(@PathVariable Integer user_id, @RequestHeader String Authentication) throws Exception{
         return userService.getFollowers(user_id, Authentication);
+    }
+
+    @PutMapping("/{new_follow_id}/follow")
+    public Object doFollow(@PathVariable Integer new_follow_id, @RequestHeader String Authentication) throws Exception{
+
+        return userService.doFollow(new_follow_id, Authentication);
+
     }
 
 //    @PutMapping(path = "/friends/{user_id}")
