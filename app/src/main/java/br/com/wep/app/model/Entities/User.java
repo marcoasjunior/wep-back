@@ -33,7 +33,10 @@ public class User {
     private List<Comment> myComments;
 
     @ManyToMany
-    private List<User> friends;
+    private List<User> following;
+
+    @ManyToMany
+    private List<User> followers;
 
     public User() {
     }
@@ -97,17 +100,15 @@ public class User {
         this.whatsapp = whatsapp;
     }
 
-    public List<User> getFriends() {
-        return friends;
-    }
+    //Quem você segue
+    public List<User> getFollowing(){return this.following;}
+    public boolean setFollowing(User new_follow){return this.following.add(new_follow);}
+    public boolean removeFollowing(User follow){return this.following.remove(follow);}
 
-    public void setFriends(User friend) {
-        this.friends.add(friend);
-    }
-
-    public void removeFriend(User friend){
-        this.friends.remove(friend);
-    }
+    //Quem segue você
+    public List<User> getFollowers(){return this.followers;}
+    public boolean setFollowers(User new_follower){return this.followers.add(new_follower);}
+    public boolean removeFollowers(User follower){return this.followers.remove(follower);}
 
     @JsonIgnore
     public List<Event> getMyEvents() {

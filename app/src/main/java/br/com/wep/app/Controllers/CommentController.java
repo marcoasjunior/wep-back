@@ -29,12 +29,14 @@ public class CommentController {
     private UserRepo userRepo;
     @Autowired
     private EventRepo eventRepo;
+    @Autowired
     private CommentService commentService;
+    @Autowired
     private TokenService tokenService;
 
     @GetMapping
     public List<Comment> index() {
-        return (List<Comment>) repo.findAll();
+        return commentService.index();
     };
 
     @PostMapping("/{event_id}")
