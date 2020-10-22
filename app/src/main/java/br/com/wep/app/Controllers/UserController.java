@@ -1,5 +1,6 @@
 package br.com.wep.app.Controllers;
 
+import br.com.wep.app.Services.Entities.UserService;
 import br.com.wep.app.config.TokenService;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.UserRepo;
@@ -23,12 +24,14 @@ public class UserController {
     @Autowired
     private UserRepo repo;
 
+    @Autowired
+    private UserService userService;
+
     private TokenService tokenService;
 
     @GetMapping
     public List<User> getUsers(){
-        List<User> users = (List<User>) repo.findAll();
-        return users;
+        return userService.index();
     }
 
     //Recebe um JSON com email e password
@@ -69,17 +72,8 @@ public class UserController {
     }
 
     @PostMapping
-    public User registerUser(@RequestBody User user){
-        try{
-            String password = user.getPassword();
-            user.setPassword(md5Password.md5(password));
-            return repo.save(user);
-
-        }catch (Exception e) {
-            System.out.println(e);
-            return null;
-        }
-
+    public Object registerUser(@RequestBody User user){
+        return userService.store(user);
     }
 
     @GetMapping(path = "/{userID}")
@@ -174,44 +168,54 @@ public class UserController {
         return user;
     }
 
-    @PutMapping(path = "/friends/{user_id}")
-    public User doFollow(@PathVariable int user_id, @RequestHeader String Authentication) throws Exception{
-        try{
-            String token = tokenService.decodeToken(Authentication).getSubject();
-            User user = repo.getUserByEmail(token);
-            User newFriend = repo.findById(user_id).get();
-
-            if(user == null){
-                throw new CredentialException("Acesso negado");
-            }
-
-            user.setFriends(newFriend);
-
-            return repo.save(user);
-        }catch (Exception e){
-            System.out.println(e);
-        }
-        return null;
+    @GetMapping("/{user_id}/following")
+    public List<User> getFollowing(@PathVariable Integer user_id, @RequestHeader String Authentication) throws Exception{
+        return userService.getFollowing(user_id, Authentication);
     }
 
-    @DeleteMapping(path = "/friends/{user_id}")
-    public Object doUnfollow(@PathVariable int user_id, @RequestHeader String Authentication)throws Exception{
-
-            try{
-                String token = tokenService.decodeToken(Authentication).getSubject();
-                User user = repo.getUserByEmail(token);
-                User newFriend = repo.findById(user_id).get();
-
-                if(user == null){
-                    throw new CredentialException("Acesso negado");
-                }
-
-                user.removeFriend(newFriend);
-
-                return repo.save(user);
-            }catch (Exception e){
-                System.out.println(e);
-            }
-            return null;
+    @GetMapping("/{user_id/followers")
+    public List<User> getFollowers(@PathVariable Integer user_id, @RequestHeader String Authentication) throws Exception{
+        return userService.getFollowers(user_id, Authentication);
     }
+
+//    @PutMapping(path = "/friends/{user_id}")
+//    public User doFollow(@PathVariable int user_id, @RequestHeader String Authentication) throws Exception{
+//        try{
+//            String token = tokenService.decodeToken(Authentication).getSubject();
+//            User user = repo.getUserByEmail(token);
+//            User newFriend = repo.findById(user_id).get();
+//
+//            if(user == null){
+//                throw new CredentialException("Acesso negado");
+//            }
+//
+//            user.setFriends(newFriend);
+//
+//            return repo.save(user);
+//        }catch (Exception e){
+//            System.out.println(e);
+//        }
+//        return null;
+//    }
+//
+//    @DeleteMapping(path = "/friends/{user_id}")
+//    public Object doUnfollow(@PathVariable int user_id, @RequestHeader String Authentication)throws Exception{
+//
+//            try{
+//                String token = tokenService.decodeToken(Authentication).getSubject();
+//                User user = repo.getUserByEmail(token);
+//                User newFriend = repo.findById(user_id).get();
+//
+//                if(user == null){
+//                    throw new CredentialException("Acesso negado");
+//                }
+//
+//                user.removeFriend(newFriend);
+//
+//                return repo.save(user);
+//            }catch (Exception e){
+//                System.out.println(e);
+//            }
+//            return null;
+//    }
 }
