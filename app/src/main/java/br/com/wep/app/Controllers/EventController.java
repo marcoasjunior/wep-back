@@ -5,19 +5,13 @@ import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.EventRepo;
 import br.com.wep.app.model.Repos.UserRepo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/api/event")
@@ -74,6 +68,26 @@ public class EventController {
         }catch (Exception exc){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
+        }
+    }
+
+    //Update Event
+    @PutMapping(path = "/{eventID}")
+    public Event like(@RequestBody User user,  @PathVariable int eventID){
+        try {
+
+            Event event = repo.findById(eventID).get();
+            Integer likes = event.getLikes();
+            Integer newLikes = likes + 1;
+
+            event.setLiked((List<User>) user);
+            event.setLikes(newLikes);
+
+            return repo.save(event);
+
+
+        }   catch (Exception exc){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
         }
     }
 

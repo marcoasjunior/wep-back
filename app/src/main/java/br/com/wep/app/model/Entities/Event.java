@@ -1,10 +1,5 @@
 package br.com.wep.app.model.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -29,10 +24,8 @@ public class Event {
     private String img;
     @Column(name = "privated", nullable = false)
     private boolean privated;
-    @Column(name = "liked")
-    private List<User> liked;
     @Column(name = "likes")
-    private Number likes;
+    private Integer likes = 0;
 
     private Date createdAt;
 
@@ -53,6 +46,9 @@ public class Event {
     @OneToMany(mappedBy = "event")
     //@JsonManagedReference
     private List<Comment> comments;
+
+    @OneToMany
+    private List<User> liked;
 
     @ManyToOne
     //@JsonManagedReference
@@ -134,6 +130,10 @@ public class Event {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    public Integer getLikes() { return likes; }
+
+    public void setLikes(Integer likes) { this.likes = likes; }
 
     public String getEventDate() {
         return eventDate;
