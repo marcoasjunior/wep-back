@@ -16,11 +16,9 @@ import java.util.List;
 @Table(name = "events")
 public class Event {
 
-    //@Id diz que este atributo é a chava primaria da entidade
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    //Os @Column são "configurações" das colunas da tabela
     @Column(name = "Title", nullable = false, length = 100)
     private String title;
     @Column(name = "description", nullable = false, length = 600)
@@ -31,6 +29,10 @@ public class Event {
     private String img;
     @Column(name = "privated", nullable = false)
     private boolean privated;
+    @Column(name = "liked")
+    private List<User> liked;
+    @Column(name = "likes")
+    private Number likes;
 
     private Date createdAt;
 
@@ -160,6 +162,10 @@ public class Event {
     public List<Comment> getComments() {
         return comments;
     }
+
+    public List<User> getLiked() { return liked; }
+
+    public void setLiked(List<User> liked) { this.liked = liked; }
 
     public void setComments(Comment comment) {
         this.comments.add(comment);
