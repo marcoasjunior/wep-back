@@ -71,16 +71,21 @@ public class EventController {
         }
     }
 
-    //Update Event
+    // Add like
     @PutMapping(path = "/{eventID}")
     public Event like(@RequestBody User user,  @PathVariable int eventID){
         try {
 
             Event event = repo.findById(eventID).get();
+
+            List<User> liked = event.getLiked();
+            liked.add(user);
+
             Integer likes = event.getLikes();
             Integer newLikes = likes + 1;
 
-            event.setLiked((List<User>) user);
+
+            event.setLiked(liked);
             event.setLikes(newLikes);
 
             return repo.save(event);
@@ -88,6 +93,30 @@ public class EventController {
 
         }   catch (Exception exc){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
+        }
+    }
+
+    @PutMapping(path = "/{eventID}")
+    public Event unlike(@RequestBody User user,  @PathVariable int eventID){
+        try {
+
+            Event event = repo.findById(eventID).get();
+
+            List<User> liked = event.getLiked();
+            liked.remove(user);
+
+            Integer likes = event.getLikes();
+            Integer newLikes = likes - 1;
+
+
+            event.setLiked(liked);
+            event.setLikes(newLikes);
+
+            return repo.save(event);
+
+
+        }   catch (Exception exc){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
         }
     }
 
