@@ -71,19 +71,19 @@ public class EventController {
         }
     }
 
-    // Add like
-    @PutMapping(path = "/{eventID}")
-    public Event like(@RequestBody User user,  @PathVariable int eventID){
+    @CrossOrigin
+    @PutMapping(path = "/like/{userID}/{eventID}")
+    public Event like(@PathVariable Integer eventID, @PathVariable Integer userID ){
         try {
 
             Event event = repo.findById(eventID).get();
+            User user = userRepo.findById(userID).get();
 
             List<User> liked = event.getLiked();
             liked.add(user);
 
-            Integer likes = event.getLikes();
-            Integer newLikes = likes + 1;
-
+            int likes = event.getLikes();
+            int newLikes = likes + 1;
 
             event.setLiked(liked);
             event.setLikes(newLikes);
@@ -95,12 +95,13 @@ public class EventController {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
         }
     }
-
-    @PutMapping(path = "/{eventID}")
-    public Event unlike(@RequestBody User user,  @PathVariable int eventID){
+    @CrossOrigin
+    @PutMapping(path = "/unlike/{userID}/{eventID}")
+    public Event unlike(@PathVariable Integer eventID, Integer userID ){
         try {
 
             Event event = repo.findById(eventID).get();
+            User user = userRepo.findById(userID).get();
 
             List<User> liked = event.getLiked();
             liked.remove(user);
