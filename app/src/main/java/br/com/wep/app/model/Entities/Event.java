@@ -48,7 +48,7 @@ public class Event {
     private List<Comment> comments;
 
     @OneToMany
-    private List<User> liked;
+    private List<Like> liked;
 
     @ManyToOne
     //@JsonManagedReference
@@ -163,9 +163,9 @@ public class Event {
         return comments;
     }
 
-    public List<User> getLiked() { return liked; }
+    public List<Like> getLiked() { return liked; }
 
-    public void setLiked(List<User> liked) { this.liked = liked; }
+    public void setLiked(List<Like> liked) { this.liked = liked; }
 
     public void setComments(Comment comment) {
         this.comments.add(comment);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/api/event")
@@ -80,6 +81,12 @@ public class EventController {
             User user = userRepo.findById(userID).get();
 
             List<User> liked = event.getLiked();
+            List<User> check = liked.stream().filter(eUser -> eUser.getId().equals(user.getId())).collect(Collectors.toList());
+
+            int likedLength = check.size();
+
+            if (likedLength > 0) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Evento já curtido pelo usuário");
+
             liked.add(user);
 
             int likes = event.getLikes();
@@ -92,32 +99,34 @@ public class EventController {
 
 
         }   catch (Exception exc){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Evento não alterado ", exc);
         }
     }
     @CrossOrigin
     @PutMapping(path = "/unlike/{userID}/{eventID}")
-    public Event unlike(@PathVariable Integer eventID, Integer userID ){
+    public Event unlike(@PathVariable Integer eventID, @PathVariable Integer userID ){
         try {
 
             Event event = repo.findById(eventID).get();
             User user = userRepo.findById(userID).get();
 
             List<User> liked = event.getLiked();
+
+            boolean check = liked.contains(user);
+            if (!check) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Evento não curtido pelo usuário");
+
             liked.remove(user);
 
             Integer likes = event.getLikes();
             Integer newLikes = likes - 1;
-
 
             event.setLiked(liked);
             event.setLikes(newLikes);
 
             return repo.save(event);
 
-
         }   catch (Exception exc){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Evento não alterado ", exc);
         }
     }
 
