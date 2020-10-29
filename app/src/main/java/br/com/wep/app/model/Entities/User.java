@@ -38,6 +38,9 @@ public class User {
     @ManyToMany
     private List<User> followers;
 
+    @ManyToMany
+    private List<Event> confirmedsEvents;
+
     public User() {
     }
 
@@ -141,5 +144,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(password);
+    }
+
+    @JsonIgnore
+    public List<Event> getConfirmedsEvents() {
+        return confirmedsEvents;
+    }
+
+    public void setConfirmedsEvents(Event confirmedsEvents) {
+        this.confirmedsEvents.add(confirmedsEvents);
     }
 }
