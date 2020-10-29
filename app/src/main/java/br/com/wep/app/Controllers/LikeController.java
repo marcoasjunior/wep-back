@@ -1,9 +1,7 @@
 package br.com.wep.app.Controllers;
 
 import br.com.wep.app.Services.Entities.LikeService;
-import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.Like;
-import br.com.wep.app.model.Entities.User;
 import br.com.wep.app.model.Repos.EventRepo;
 import br.com.wep.app.model.Repos.LikeRepo;
 import br.com.wep.app.model.Repos.UserRepo;
@@ -36,12 +34,7 @@ public class LikeController {
     public Like create(@PathVariable Integer eventID, @PathVariable Integer userID ) {
         try{
 
-            Event event = eventRepo.findById(eventID).get();
-            User user = userRepo.findById(userID).get();
-
-            Like newLike = new Like(event, user);
-
-            return likeRepo.save(newLike);
+            return likeService.save(userID, eventID);
 
         }catch (Exception e){
             System.out.println(e);
@@ -53,11 +46,12 @@ public class LikeController {
 
         try {
             likeService.delete(eventID, userID);
-            ResponseEntity responseEntity = new ResponseEntity<String>("Like Deleted", HttpStatus.OK);
+            return new ResponseEntity<String>("Like Deleted", HttpStatus.OK);
+
         }  catch (Exception e) {
-            ResponseEntity responseEntity = new ResponseEntity<String>("Unable delete movie", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("Unable delete", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return responseEntity;
+
     }
 
 }

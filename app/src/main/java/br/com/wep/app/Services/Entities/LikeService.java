@@ -1,5 +1,7 @@
 package br.com.wep.app.Services.Entities;
 
+import br.com.wep.app.exceptions.InvalidUserEventException;
+import br.com.wep.app.exceptions.LikeNotFound;
 import br.com.wep.app.model.Entities.Event;
 import br.com.wep.app.model.Entities.Like;
 import br.com.wep.app.model.Entities.User;
@@ -11,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LikeService {
@@ -23,26 +24,50 @@ public class LikeService {
     @Autowired
     private EventRepo eventRepo;
 
-
     public List<Like> index(){
         return (List<Like>) likeRepo.findAll();
     };
 
-    public boolean delete(int userId, int eventId){
+    public Like save(final int userId, final int eventId) {
+
+        Event event = eventRepo.findById(eventId).get();
+        User user = userRepo.findById(userId).get();
+
+        int eventLikes = event.getLikes();
+        int newLikes =  eventLikes + 1;
+
+        event.setLikes(newLikes);
+
+        Like newLike = new Like(event, user);
+
+        likeRepo.save(newLike);
+        eventRepo.save(event);
+
+        return newLike;
+
+    };
+
+    public Like delete(final int userId, final int eventId) throws InvalidUserEventException, LikeNotFound {
 
         Optional<User> user = userRepo.findById(userId);
         Optional<Event> event = eventRepo.findById(eventId);
 
-        List<Like> likes = (List<Like>) likeRepo.findAll();
+        if (user.isEmpty() && event.isEmpty()) throw new InvalidUserEventException("Erro ao deletar");
 
-        List<User> check = likes.stream().filter(eLike -> eLike.getUser().equals(user)  eLike.getUser().equals(user) ).collect(Collectors.toList());
+        Optional<Like> like = likeRepo.findLikebyEventAndUser(userId, eventId);
 
-        Like like = check.get(0);
+        if (like.isEmpty()) throw new LikeNotFound("Erro ao deletar");
 
-        likeRepo.delete(like);
+        likeRepo.delete(like.get());
 
-        return true;
+        Event realEvent = event.get();
 
+        int eventLikes = realEvent.getLikes();
+        int newLikes =  eventLikes - 1;
+        realEvent.setLikes(newLikes);
+        eventRepo.save(realEvent);
+
+        return like.get();
 
     };
 
