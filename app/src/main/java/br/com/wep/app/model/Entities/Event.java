@@ -54,6 +54,9 @@ public class Event {
     //@JsonManagedReference
     private User user;
 
+    @ManyToMany
+    private List<User> confirmeds;
+
     public Event() {
     }
 
@@ -179,4 +182,11 @@ public class Event {
         this.user = user;
     }
 
+    public List<User> getConfirmeds() {
+        return confirmeds;
+    }
+
+    public void setConfirmeds(User confirmeds) {
+        this.confirmeds.add(confirmeds);
+    }
 }

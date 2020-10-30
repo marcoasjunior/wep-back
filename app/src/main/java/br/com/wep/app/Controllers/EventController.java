@@ -131,4 +131,39 @@ public class EventController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PostMapping(path = "/confirm/{eventID}")
+    public Event confirmEvent(@RequestHeader String Authentication, @PathVariable(name = "eventID") int eventID){
+        try {
+            String token = TokenService.decodeToken(Authentication).getSubject();
+
+            Event eventData = repo.findById(eventID).get();
+            User userData = userRepo.getUserByEmail(token);
+
+            eventData.setConfirmeds(userData);
+            userData.setConfirmedsEvents(eventData);
+
+            userRepo.save(userData);
+
+            // retorna lista de usuários que confirmaram nesse evento
+            return repo.save(eventData);
+
+        }catch (Exception exc){
+            System.out.println(exc);
+            return null;
+        }
+    }
+
+    @GetMapping(path="/list/confirmeds/{eventID}")
+    public List<User> listConfimeds(@PathVariable(name = "eventID") int eventID){
+        try{
+            Event eventData = repo.findById(eventID).get();
+
+            return eventData.getConfirmeds();
+        }
+        catch(Exception exc){
+            System.out.println(exc);
+            return null;
+        }
+    }
 }
