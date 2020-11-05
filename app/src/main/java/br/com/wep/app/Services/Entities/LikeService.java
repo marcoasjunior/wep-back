@@ -33,15 +33,9 @@ public class LikeService {
         Event event = eventRepo.findById(eventId).get();
         User user = userRepo.findById(userId).get();
 
-        int eventLikes = event.getLikes();
-        int newLikes =  eventLikes + 1;
-
-        event.setLikes(newLikes);
-
         Like newLike = new Like(event, user);
 
         likeRepo.save(newLike);
-        eventRepo.save(event);
 
         return newLike;
 
@@ -62,9 +56,6 @@ public class LikeService {
 
         Event realEvent = event.get();
 
-        int eventLikes = realEvent.getLikes();
-        int newLikes =  eventLikes - 1;
-        realEvent.setLikes(newLikes);
         eventRepo.save(realEvent);
 
         return like.get();

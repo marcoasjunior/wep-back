@@ -24,8 +24,6 @@ public class Event {
     private String img;
     @Column(name = "privated", nullable = false)
     private boolean privated;
-    @Column(name = "likes")
-    private Integer likes = 0;
 
     private Date createdAt;
 
@@ -133,10 +131,6 @@ public class Event {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
-    public Integer getLikes() { return likes; }
-
-    public void setLikes(Integer likes) { this.likes = likes; }
 
     public String getEventDate() {
         return eventDate;
