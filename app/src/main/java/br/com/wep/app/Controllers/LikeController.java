@@ -30,18 +30,21 @@ public class LikeController {
         return likeService.index();
     };
 
-    @PostMapping(path = "/like/{userID}/{eventID}")
+    @CrossOrigin
+    @PostMapping(path = "/{userID}/{eventID}")
     public Like create(@PathVariable Integer eventID, @PathVariable Integer userID ) {
-        try{
+        try {
 
             return likeService.save(userID, eventID);
 
-        }catch (Exception e){
+        } catch (Exception e){
             System.out.println(e);
             return null;
         }
     }
-    @DeleteMapping(path = "/like/{userID}/{eventID}")
+
+    @CrossOrigin
+    @DeleteMapping(path = "/{userID}/{eventID}")
     public ResponseEntity<?> delete(@PathVariable Integer eventID, @PathVariable Integer userID ) throws Exception {
 
         try {

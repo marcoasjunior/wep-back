@@ -24,11 +24,13 @@ public class EventController {
 
     @GetMapping(path = "/list")
     public List<Event> getEvents(){
+
         List<Event> events = (List<Event>) repo.findAll();
+
         return events;
     }
 
-    //Registrar evento
+    @CrossOrigin
     @PostMapping(path = "/create",consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public Event registerEvent(@RequestBody Event event){
@@ -51,7 +53,6 @@ public class EventController {
         try {
 
             Event eventId = repo.findById(eventID).get();
-
 
             eventId.setTitle(newEvent.getTitle());
             eventId.setDescription(newEvent.getDescription());
