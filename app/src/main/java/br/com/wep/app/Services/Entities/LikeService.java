@@ -28,7 +28,11 @@ public class LikeService {
         return (List<Like>) likeRepo.findAll();
     };
 
-    public Like save(final int userId, final int eventId) {
+    public Like save(final int userId, final int eventId) throws Exception {
+
+        /* Like existLike = likeRepo.findLikebyEventAndUser(userId, eventId); */
+
+        /* if (existLike == null) throw new Exception("Já existe a curtida do usuário para o evento."); */
 
         Event event = eventRepo.findById(eventId).get();
         User user = userRepo.findById(userId).get();
@@ -48,17 +52,17 @@ public class LikeService {
 
         if (user.isEmpty() && event.isEmpty()) throw new InvalidUserEventException("Erro ao deletar");
 
-        Optional<Like> like = likeRepo.findLikebyEventAndUser(userId, eventId);
+        Like like = likeRepo.findLikebyEventAndUser(userId, eventId);
 
-        if (like.isEmpty()) throw new LikeNotFound("Erro ao deletar");
+        if (like == null) throw new LikeNotFound("Erro ao deletar");
 
-        likeRepo.delete(like.get());
+        likeRepo.delete(like);
 
         Event realEvent = event.get();
 
         eventRepo.save(realEvent);
 
-        return like.get();
+        return like;
 
     };
 

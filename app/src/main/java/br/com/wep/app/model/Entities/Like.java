@@ -1,10 +1,16 @@
 package br.com.wep.app.model.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "likes")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Like {
 
     @Id
@@ -19,7 +25,13 @@ public class Like {
 
     private Date createdAt;
 
+    public Like() {
+    }
+
     public Like(Event event, User user) {
+
+        this.event = event;
+        this.user = user;
 
     }
 
