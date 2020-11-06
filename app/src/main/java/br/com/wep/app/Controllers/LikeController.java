@@ -25,7 +25,7 @@ public class LikeController {
     @Autowired
     private LikeRepo likeRepo;
 
-    @GetMapping
+    @GetMapping(path = "/list")
     public List<Like> index() {
         return likeService.index();
     };
