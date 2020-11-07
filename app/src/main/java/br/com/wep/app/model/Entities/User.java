@@ -151,7 +151,7 @@ public class User {
         return Objects.hash(password);
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public List<Event> getConfirmedsEvents() {
         return confirmedsEvents;
     }
