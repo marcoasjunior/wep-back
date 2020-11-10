@@ -59,6 +59,7 @@ public class CommentController {
         }
     }
 
+    @CrossOrigin
     @DeleteMapping(path = "/{commentId}")
     public void delete(@PathVariable Integer commentId, @RequestHeader String Authentication) throws Exception {
 
@@ -69,6 +70,7 @@ public class CommentController {
 
     ;
 
+    @CrossOrigin
     @PutMapping(path = "/{commentId}")
     public Comment update(@RequestBody Comment newComment, @PathVariable int commentId) {
 
