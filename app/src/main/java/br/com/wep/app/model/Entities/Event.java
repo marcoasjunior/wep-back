@@ -1,6 +1,7 @@
 package br.com.wep.app.model.Entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -10,9 +11,9 @@ import java.util.List;
 @Entity
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "events")
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Event {
 
     @Id
@@ -56,8 +57,6 @@ public class Event {
     //@JsonManagedReference
     private User user;
 
-    @ManyToMany
-    private List<User> confirmeds;
 
     public Event() {
     }
@@ -180,11 +179,4 @@ public class Event {
         this.user = user;
     }
 
-    public List<User> getConfirmeds() {
-        return confirmeds;
-    }
-
-    public void setConfirmeds(User confirmeds) {
-        this.confirmeds.add(confirmeds);
-    }
 }
