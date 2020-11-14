@@ -1,26 +1,24 @@
 package br.com.wep.app.model.Entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-//@Entity diz está classe é uma entidade
 @Entity
-//@Table referencia a table do banco de dados
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = "events")
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 public class Event {
 
-    //@Id diz que este atributo é a chava primaria da entidade
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    //Os @Column são "configurações" das colunas da tabela
     @Column(name = "Title", nullable = false, length = 100)
     private String title;
     @Column(name = "description", nullable = false, length = 600)
@@ -52,9 +50,13 @@ public class Event {
     //@JsonManagedReference
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "event")
+    private List<Like> liked;
+
     @ManyToOne
     //@JsonManagedReference
     private User user;
+
 
     public Event() {
     }
@@ -160,6 +162,10 @@ public class Event {
     public List<Comment> getComments() {
         return comments;
     }
+
+    public List<Like> getLiked() { return liked; }
+
+    public void setLiked(List<Like> liked) { this.liked = liked; }
 
     public void setComments(Comment comment) {
         this.comments.add(comment);

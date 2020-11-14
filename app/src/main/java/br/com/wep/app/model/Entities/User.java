@@ -1,5 +1,6 @@
 package br.com.wep.app.model.Entities;
-import com.fasterxml.jackson.annotation.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,6 +32,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     //@JsonBackReference
     private List<Comment> myComments;
+
+    @OneToMany(mappedBy = "user")
+    //@JsonBackReference
+    private List<Like> liked;
 
     @ManyToMany
     private List<User> following;
@@ -164,4 +169,5 @@ public class User {
     public int hashCode() {
         return Objects.hash(password);
     }
+
 }
