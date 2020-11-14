@@ -132,6 +132,7 @@ public class UserController {
     }
 
     //alterar usuario
+    @CrossOrigin
     @PutMapping
     public Object updateUser(@RequestBody User newUser, @RequestHeader String Authentication){
         try{
