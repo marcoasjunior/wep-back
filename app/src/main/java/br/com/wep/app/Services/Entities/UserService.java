@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.wep.app.config.md5Password;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +26,11 @@ public class UserService {
         try{
             String password = user.getPassword();
             user.setPassword(md5Password.md5(password));
-            return userRepo.save(user);
+            userRepo.save(user);
+            List<Object> retornos = new ArrayList<>();
+            retornos.add(tokenService.generateToken(user));
+            retornos.add(user.getId());
+            return retornos;
         }catch (Exception e){
             return e;
         }
@@ -62,5 +67,20 @@ public class UserService {
 
         userRepo.save(new_follow_user);
         return userRepo.save(user);
+    }
+
+    public Object doUnfollow(int unfollow_id, String auth) {
+        try{
+            User user = userRepo.getUserByEmail(tokenService.decodeToken(auth).getSubject());
+            User unfollow_user = userRepo.findById(unfollow_id).get();
+
+            user.removeFollowing(unfollow_user);
+            unfollow_user.removeFollowers(user);
+
+            userRepo.save(unfollow_user);
+            return userRepo.save(user);
+        }catch (Exception e){
+            return e;
+        }
     }
 }

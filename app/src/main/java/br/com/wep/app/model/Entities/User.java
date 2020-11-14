@@ -103,14 +103,36 @@ public class User {
     //Quem você segue
     @JsonIgnore
     public List<User> getFollowing(){return this.following;}
-    public boolean setFollowing(User new_follow){return this.following.add(new_follow);}
-    public boolean removeFollowing(User follow){return this.following.remove(follow);}
+    public boolean setFollowing(User new_follow){
+        return this.following.add(new_follow);
+    }
+    public void removeFollowing(User follow){
+        for(int i = 0; i < this.following.size(); i++) {
+            User user = this.following.get(i);
 
-    //Quem segue você
+            if (user.getId() == follow.getId()) {
+                this.following.remove(i);
+                break;
+            }
+        }
+    }
+
+    //Quem segue voce
     @JsonIgnore
     public List<User> getFollowers(){return this.followers;}
-    public boolean setFollowers(User new_follower){return this.followers.add(new_follower);}
-    public boolean removeFollowers(User follower){return this.followers.remove(follower);}
+    public boolean setFollowers(User new_follower){
+        return this.followers.add(new_follower);
+    }
+    public void removeFollowers(User follower){
+        for(int i = 0; i < this.followers.size(); i++){
+            User user = this.followers.get(i);
+
+            if(user.getId() == follower.getId()){
+                this.followers.remove(i);
+                break;
+            }
+        }
+    }
 
     @JsonIgnore
     public List<Event> getMyEvents() {
