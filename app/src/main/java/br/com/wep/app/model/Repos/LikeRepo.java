@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface LikeRepo extends CrudRepository<Like, Integer> {
 
-    @Query(value = "SELECT like FROM Like like WHERE like.user = :userId and like.event = :eventId", nativeQuery = true)
-    Like findLikebyEventAndUser(@Param("userId")int userId,@Param("eventId") int eventId);
+    @Query(value = "SELECT * FROM likes WHERE user = :userId and event = :eventId", nativeQuery = true)
+    Like findLikebyEventAndUser(@Param("userId") int userId,@Param("eventId") int eventId);
 
 }
