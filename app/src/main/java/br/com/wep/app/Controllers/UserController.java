@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 //@RestController declara essa classe como um controller
-@CrossOrigin
 @RestController
 //@RequestMapping a rota "mãe" de todas as rotas
 @RequestMapping(path = "/api/user")
@@ -72,8 +71,8 @@ public class UserController {
     }
 
     @PostMapping
-    public Object registerUser(@RequestBody User user){
-        return userService.store(user);
+    public List<Object> registerUser(@RequestBody User user){
+        return (List<Object>) userService.store(user);
     }
 
     @GetMapping(path = "/{userID}")
@@ -133,6 +132,7 @@ public class UserController {
     }
 
     //alterar usuario
+    @CrossOrigin
     @PutMapping
     public Object updateUser(@RequestBody User newUser, @RequestHeader String Authentication){
         try{
@@ -178,51 +178,17 @@ public class UserController {
         return userService.getFollowers(user_id, Authentication);
     }
 
-    @PutMapping("/{new_follow_id}/follow")
+    @CrossOrigin
+    @PostMapping("/{new_follow_id}/follow")
     public Object doFollow(@PathVariable Integer new_follow_id, @RequestHeader String Authentication) throws Exception{
 
         return userService.doFollow(new_follow_id, Authentication);
 
     }
 
-//    @PutMapping(path = "/friends/{user_id}")
-//    public User doFollow(@PathVariable int user_id, @RequestHeader String Authentication) throws Exception{
-//        try{
-//            String token = tokenService.decodeToken(Authentication).getSubject();
-//            User user = repo.getUserByEmail(token);
-//            User newFriend = repo.findById(user_id).get();
-//
-//            if(user == null){
-//                throw new CredentialException("Acesso negado");
-//            }
-//
-//            user.setFriends(newFriend);
-//
-//            return repo.save(user);
-//        }catch (Exception e){
-//            System.out.println(e);
-//        }
-//        return null;
-//    }
-//
-//    @DeleteMapping(path = "/friends/{user_id}")
-//    public Object doUnfollow(@PathVariable int user_id, @RequestHeader String Authentication)throws Exception{
-//
-//            try{
-//                String token = tokenService.decodeToken(Authentication).getSubject();
-//                User user = repo.getUserByEmail(token);
-//                User newFriend = repo.findById(user_id).get();
-//
-//                if(user == null){
-//                    throw new CredentialException("Acesso negado");
-//                }
-//
-//                user.removeFriend(newFriend);
-//
-//                return repo.save(user);
-//            }catch (Exception e){
-//                System.out.println(e);
-//            }
-//            return null;
-//    }
+    @CrossOrigin
+    @DeleteMapping("/{unfollow_id}/unfollow")
+    public Object doUnFollow(@PathVariable Integer unfollow_id, @RequestHeader String Authentication){
+        return userService.doUnfollow(unfollow_id, Authentication);
+    }
 }
