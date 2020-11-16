@@ -18,11 +18,11 @@ public class Like {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "event", referencedColumnName = "id")
+    @JoinColumn(name = "event_id", referencedColumnName = "id")
     private Event event;
 
     private Date createdAt;
