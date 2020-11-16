@@ -30,9 +30,9 @@ public class LikeService {
 
     public Like save(final int userId, final int eventId) throws Exception {
 
-       /*  Like existLike = likeRepo.findLikebyEventAndUser(userId, eventId);
+         Like existLike = likeRepo.findLikebyEventAndUser(userId, eventId);
 
-         if (existLike != null) throw new Exception("Já existe a curtida do usuário para o evento."); */
+         if (existLike != null) throw new Exception("Já existe a curtida do usuário para o evento.");
 
         Event event = eventRepo.findById(eventId).get();
         User user = userRepo.findById(userId).get();
