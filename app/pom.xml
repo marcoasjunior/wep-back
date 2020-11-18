@@ -16,6 +16,8 @@
 
 	<properties>
 		<java.version>14</java.version>
+		<maven.compiler.source>14</maven.compiler.source>
+		<maven.compiler.target>14</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -59,7 +61,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
@@ -69,6 +71,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>2.3.0.RELEASE</version>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>
