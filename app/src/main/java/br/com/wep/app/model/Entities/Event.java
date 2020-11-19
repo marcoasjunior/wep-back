@@ -139,6 +139,7 @@ public class Event {
         return eventDate;
     }
 
+
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
