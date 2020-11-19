@@ -138,8 +138,7 @@ public class Event {
     public String getEventDate() {
         return eventDate;
     }
-
-
+    
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
